@@ -29,7 +29,7 @@ foreach ($t in @("git", "docker", "python", "uv")) {
     }
     elseif ($t -eq "docker" -and (Get-Command podman -ErrorAction SilentlyContinue)) {
         Write-Warn "docker not found, but podman is" `
-                   "Podman works fine here. Note which one you used in NETWORK.md."
+                   "Podman works for this course. Note which one in use_case/ecosystem.md."
     }
     else {
         Write-Bad "$t not found" "See 00_Prerequisites/1_Your_Machine/README.md"
@@ -59,7 +59,7 @@ if (Get-Command docker -ErrorAction SilentlyContinue) {
         Write-Ok "docker daemon is running"
     } else {
         Write-Warn "docker is installed but the daemon is not responding" `
-                   "Start Docker Desktop before you need to build a container."
+                   "Start Docker Desktop before Week 1's Step 5."
     }
 }
 
@@ -82,17 +82,17 @@ if ($LASTEXITCODE -eq 0) {
     Write-Ok "inside a git repository"
     $origin = (& git remote get-url origin 2>$null)
     if (-not $origin) {
-        Write-Warn "no 'origin' remote" "Clone your own repo rather than downloading a zip."
+        Write-Warn "no 'origin' remote" "Clone your fork rather than downloading a zip."
     }
-    elseif ($origin -match "AI-Maker-Space/The-Enterprise-FDE-Challenge") {
-        Write-Warn "origin is our repository, not yours" `
-                   "Create your own empty repo and add ours as 'upstream' -- see guide 3."
+    elseif ($origin -match "AI-Maker-Space/The-AI-Forward-Deployed-Engineer-Certification") {
+        Write-Warn "origin is the upstream repository, not your fork" `
+                   "Fork it and clone your fork -- you need somewhere to commit your work."
     }
     else {
-        Write-Ok "origin is your own repo  $origin"
+        Write-Ok "origin is your own fork  $origin"
     }
 } else {
-    Write-Bad "not a git repository" "See guide 3"
+    Write-Bad "not a git repository" "Clone your fork; see guide 3"
 }
 
 Write-Head "Model configuration  (guide 4)"
@@ -115,17 +115,12 @@ if (Test-Path $EnvFile) {
     Write-Bad ".env not found at the repo root" "copy .env.template .env, then fill it in"
 }
 
-Write-Head "Your findings"
-
-$Network = Join-Path $Root "NETWORK.md"
-if (-not (Test-Path $Network)) {
-    Write-Warn "NETWORK.md not found" `
-               "It ships with the repo -- if it is missing, check your clone."
-} elseif (Select-String -Path $Network -Pattern '<!-- your answer here -->' -Quiet) {
-    Write-Warn "NETWORK.md is still blank" `
-               "Run the environment check, then record what it told you. Five minutes."
+$ChallengeEnv = Join-Path $Root "01_Product_Engineering\challenge\enterprise_fde_challenge\.env"
+if (Test-Path $ChallengeEnv) {
+    Write-Ok "the Week 1 challenge has its own .env"
 } else {
-    Write-Ok "NETWORK.md is filled in"
+    Write-Warn "the Week 1 challenge has no .env yet" `
+               "copy .env.example .env inside enterprise_fde_challenge\ -- it is a separate file."
 }
 
 Write-Head "Result"
@@ -135,14 +130,15 @@ Write-Host "   $script:Fail failure(s)" -ForegroundColor Red
 Write-Host ""
 
 if ($script:Fail -gt 0) {
-    Write-Host "  Fix all of the Xs before the first session."
+    Write-Host "  Fix the X items before Session 1. Each one names the guide that covers it."
     Write-Host ""
-    Write-Host "  If something is blocked by policy rather than broken, record the policy"
-    Write-Host "  in NETWORK.md and continue. We'll need it later."
+    Write-Host "  If something is blocked by policy rather than broken, that is a finding,"
+    Write-Host "  not a failure -- write it in use_case/ecosystem.md and carry on. Week 9"
+    Write-Host "  needs it."
     Write-Host ""
     exit 1
 }
 
 if ($script:Warn -gt 0) { Write-Host "  Warnings are not blockers, but read them."; Write-Host "" }
-Write-Host "  Ready."
+Write-Host "  Ready for Session 1."
 Write-Host ""

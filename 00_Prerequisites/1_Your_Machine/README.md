@@ -1,13 +1,13 @@
 # 1 · Your machine
 
 Five tools. Install them in this order — `uv` is last because it is the one
-people skip, and the environment check probes for it.
+people skip, and Session 1 probes for it.
 
 | Tool | Why the course needs it |
 | --- | --- |
-| **Docker** | You will containerize and deploy what you build |
+| **Docker** | Week 1 containerizes your app; Week 9 deploys the container |
 | **VS Code** | Where you work. Zed works too |
-| **Git** | You will pull this material into your own repo and commit your work there |
+| **Git** | You will clone this repo and commit to your own copy every week |
 | **Python 3.12+** | Everything runs on it |
 | **uv** | One command to a working environment. Not pip, not conda |
 
@@ -99,7 +99,7 @@ alias docker=podman
 ```
 
 Everything in this course works with any of the three. **Write down which one you
-had to use** — that is a real constraint on how anything you build ships.
+had to use** — that is a real constraint on how your app ships, and Week 9 asks.
 
 ### `pip` or `uv` fails with an SSL certificate error
 
@@ -123,13 +123,13 @@ export SSL_CERT_FILE=/path/to/ca-bundle.crt
 ```
 
 Set them permanently once you know they work — in your PowerShell profile, or
-your `~/.zshrc` / `~/.bashrc`. The environment check prints the value of these
-variables, so you will see them again.
+your `~/.zshrc` / `~/.bashrc`. Session 1 prints the value of these variables, so
+you will see them again.
 
 > **Do not** use `pip install --trusted-host` or `curl -k` to get past this. They
 > work, and they work by turning off the check that the certificate exists to
 > perform. Using the real CA bundle is the same amount of effort and does not
-> teach you a habit you will regret in front of a client.
+> teach you a habit you will regret in front of your stakeholders.
 
 ### PyPI itself is blocked
 
@@ -140,7 +140,7 @@ export UV_DEFAULT_INDEX=https://your-internal-mirror/simple
 ```
 
 If you do not know whether you have one, that is the question to ask — and the
-answer belongs in [`NETWORK.md`](../../NETWORK.md).
+answer belongs in [`use_case/ecosystem.md`](../../use_case/ecosystem.md).
 
 ### You cannot install anything at all
 
@@ -152,7 +152,7 @@ You still have options, in rough order of preference:
    answered about the work environment. You lose the ability to measure your
    firm's restrictions, but not the ability to ask about them.
 3. **Start the approval process now and do
-   [Getting to Concreteness](../../01_Product_Engineering/challenge/getting_to_concreteness/README.md)
+   [Getting to Concreteness](https://bit.ly/fde-concreteness)
    while you wait.** It needs no tooling at all and it is the input to everything
    else.
 

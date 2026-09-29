@@ -29,7 +29,7 @@ for t in git docker python3 uv; do
     ok "python  ${DIM}$(ver python --version)${OFF}"
   elif [ "$t" = docker ] && { command -v podman >/dev/null 2>&1 || command -v nerdctl >/dev/null 2>&1; }; then
     warn "docker not found, but a substitute is" \
-         "podman/nerdctl works fine here. Note which one you used in NETWORK.md."
+         "podman/nerdctl works for this course. Note which one in use_case/ecosystem.md."
   else
     bad "$name not found" "See 00_Prerequisites/1_Your_Machine/README.md"
   fi
@@ -52,7 +52,7 @@ if command -v docker >/dev/null 2>&1; then
     ok "docker daemon is running"
   else
     warn "docker is installed but the daemon is not responding" \
-         "Start Docker Desktop (or your engine) before you need to build a container."
+         "Start Docker Desktop (or your engine) before Week 1's Step 5."
   fi
 fi
 
@@ -74,14 +74,14 @@ if git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   ok "inside a git repository"
   origin=$(git -C "$ROOT" remote get-url origin 2>/dev/null || echo "")
   case "$origin" in
-    *AI-Maker-Space/The-Enterprise-FDE-Challenge*)
-      warn "origin is our repository, not yours" \
-           "Create your own empty repo and add ours as 'upstream' -- see guide 3." ;;
-    "") warn "no 'origin' remote" "Clone your own repo rather than downloading a zip." ;;
-    *)  ok "origin is your own repo  ${DIM}${origin}${OFF}" ;;
+    *AI-Maker-Space/The-AI-Forward-Deployed-Engineer-Certification*)
+      warn "origin is the upstream repository, not your fork" \
+           "Fork it and clone your fork -- you need somewhere to commit your work." ;;
+    "") warn "no 'origin' remote" "Clone your fork rather than downloading a zip." ;;
+    *)  ok "origin is your own fork  ${DIM}${origin}${OFF}" ;;
   esac
 else
-  bad "not a git repository" "See 00_Prerequisites/3_Your_Repo/README.md"
+  bad "not a git repository" "Clone your fork; see 00_Prerequisites/3_Fork_and_Run/README.md"
 fi
 
 head_ "Model configuration  (guide 4)"
@@ -103,17 +103,12 @@ else
   bad ".env not found at the repo root" "cp .env.template .env, then fill it in"
 fi
 
-head_ "Your findings"
-
-network="$ROOT/NETWORK.md"
-if [ ! -f "$network" ]; then
-  warn "NETWORK.md not found" \
-       "It ships with the repo -- if it is missing, check your clone."
-elif grep -q "<!-- your answer here -->" "$network"; then
-  warn "NETWORK.md is still blank" \
-       "Run the environment check, then record what it told you. Five minutes."
+challenge_env="$ROOT/01_Product_Engineering/challenge/enterprise_fde_challenge/.env"
+if [ -f "$challenge_env" ]; then
+  ok "the Week 1 challenge has its own .env"
 else
-  ok "NETWORK.md is filled in"
+  warn "the Week 1 challenge has no .env yet" \
+       "cp .env.example .env inside enterprise_fde_challenge/ -- it is a separate file."
 fi
 
 head_ "Result"
@@ -122,10 +117,10 @@ printf '  %s%d passed%s   %s%d warning(s)%s   %s%d failure(s)%s\n\n' \
 
 if [ "$FAIL" -gt 0 ]; then
   cat <<'EOF'
-  Fix all of the ✗s before the first session.
+  Fix the ✗ items before Session 1. Each one names the guide that covers it.
 
-  If something is blocked by policy rather than broken, record the policy in
-  NETWORK.md and continue. We'll need it later.
+  If something is blocked by policy rather than broken, that is a finding, not
+  a failure -- write it in use_case/ecosystem.md and carry on. Week 9 needs it.
 
 EOF
   exit 1
@@ -135,4 +130,4 @@ if [ "$WARN" -gt 0 ]; then
   printf '  Warnings are not blockers, but read them.\n\n'
 fi
 
-printf '  Ready.\n\n'
+printf '  Ready for Session 1.\n\n'
